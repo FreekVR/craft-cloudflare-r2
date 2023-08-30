@@ -115,7 +115,7 @@ class Fs extends FlysystemFs
     /**
      * @var bool Set ACL for Uploads
      */
-    public bool $makeUploadsPublic = false;
+    public bool $makeUploadsPublic = true;
 
     /**
      * @var string S3 storage class to use.
@@ -400,26 +400,6 @@ class Fs extends FlysystemFs
             return $this->_subfolder();
         }
         return '';
-    }
-
-    /**
-     * Returns the parsed CloudFront distribution prefix
-     *
-     * @return string
-     */
-    private function _cfPrefix(): string
-    {
-        return '';
-    }
-
-    /**
-     * Get a CloudFront client.
-     *
-     * @return null
-     */
-    private function _getCloudFrontClient()
-    {
-        return null;
     }
 
     /**
