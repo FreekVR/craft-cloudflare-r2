@@ -250,7 +250,7 @@ class Fs extends FlysystemFs
     protected function createAdapter(): FilesystemAdapter
     {
         $client = static::client($this->_getConfigArray(), $this->_getCredentials());
-        return new AwsS3V3Adapter($client, App::parseEnv($this->bucket), $this->_subfolder(), new PortableVisibilityConverter($this->visibility()), null, [], false);
+        return new AwsS3V3Adapter($client, App::parseEnv($this->bucket), $this->_subfolder(), null, null, [], false);
     }
 
     /**
