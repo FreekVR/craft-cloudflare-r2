@@ -27,6 +27,7 @@ use DateTime;
 use InvalidArgumentException;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\AwsS3V3\PortableVisibilityConverter;
+use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\Visibility;
 use yii\base\Application;
@@ -113,11 +114,6 @@ class Fs extends FlysystemFs
     public string $expires = '';
 
     /**
-     * @var bool Set ACL for Uploads
-     */
-    public bool $makeUploadsPublic = true;
-
-    /**
      * @var string S3 storage class to use.
      * @deprecated in 1.1.1
      */
@@ -141,6 +137,7 @@ class Fs extends FlysystemFs
      */
     public function __construct(array $config = [])
     {
+        $config[Config::OPTION_VISIBILITY] = 'public';
         if (isset($config['manualBucket'])) {
             if (isset($config['bucketSelectionMode']) && $config['bucketSelectionMode'] === 'manual') {
                 $config['bucket'] = ArrayHelper::remove($config, 'manualBucket');
@@ -426,15 +423,5 @@ class Fs extends FlysystemFs
             'secret' => App::parseEnv($this->secret),
             'accountId' => App::parseEnv($this->accountId),
         ];
-    }
-
-    /**
-     * Returns the visibility setting for the Fs.
-     *
-     * @return string
-     */
-    protected function visibility(): string
-    {
-        return $this->makeUploadsPublic ? Visibility::PUBLIC : Visibility::PRIVATE;
     }
 }
