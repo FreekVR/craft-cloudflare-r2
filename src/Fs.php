@@ -114,6 +114,11 @@ class Fs extends FlysystemFs
     public string $expires = '';
 
     /**
+     * @var bool Set ACL for Uploads
+     */
+    public bool $makeUploadsPublic = true;
+
+    /**
      * @var string S3 storage class to use.
      * @deprecated in 1.1.1
      */
@@ -137,7 +142,8 @@ class Fs extends FlysystemFs
      */
     public function __construct(array $config = [])
     {
-        $config[Config::OPTION_VISIBILITY] = 'public';
+        $config[Config::OPTION_VISIBILITY] = $this->makeUploadsPublic ? Visibility::PUBLIC : Visibility::PRIVATE;
+
         if (isset($config['manualBucket'])) {
             if (isset($config['bucketSelectionMode']) && $config['bucketSelectionMode'] === 'manual') {
                 $config['bucket'] = ArrayHelper::remove($config, 'manualBucket');
@@ -423,5 +429,15 @@ class Fs extends FlysystemFs
             'secret' => App::parseEnv($this->secret),
             'accountId' => App::parseEnv($this->accountId),
         ];
+    }
+
+    /**
+     * Returns the visibility setting for the Fs.
+     *
+     * @return string
+     */
+    protected function visibility(): string
+    {
+        return $this->makeUploadsPublic ? Visibility::PUBLIC : Visibility::PRIVATE;
     }
 }
