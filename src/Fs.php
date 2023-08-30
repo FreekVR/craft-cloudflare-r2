@@ -147,8 +147,6 @@ class Fs extends FlysystemFs
      */
     public function __construct(array $config = [])
     {
-        $config[Config::OPTION_VISIBILITY] = $this->makeUploadsPublic ? Visibility::PUBLIC : Visibility::PRIVATE;
-
         if (isset($config['manualBucket'])) {
             if (isset($config['bucketSelectionMode']) && $config['bucketSelectionMode'] === 'manual') {
                 $config['bucket'] = ArrayHelper::remove($config, 'manualBucket');
@@ -253,12 +251,12 @@ class Fs extends FlysystemFs
 
     /**
      * @inheritdoc
-     * @return AwsS3V3Adapter
+     * @return FilesystemAdapter
      */
     protected function createAdapter(): FilesystemAdapter
     {
         $client = static::client($this->_getConfigArray(), $this->_getCredentials());
-        return new AwsS3V3Adapter($client, App::parseEnv($this->bucket), $this->_subfolder(), null, null, [], false);
+        return new CloudflareR2Adapter($client, App::parseEnv($this->bucket), $this->_subfolder(), null, null, [], false);
     }
 
     /**
@@ -434,15 +432,5 @@ class Fs extends FlysystemFs
             'secret' => App::parseEnv($this->secret),
             'accountId' => App::parseEnv($this->accountId),
         ];
-    }
-
-    /**
-     * Returns the visibility setting for the Fs.
-     *
-     * @return string
-     */
-    protected function visibility(): string
-    {
-        return $this->makeUploadsPublic ? Visibility::PUBLIC : Visibility::PRIVATE;
     }
 }
