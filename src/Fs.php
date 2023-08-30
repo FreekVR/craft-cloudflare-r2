@@ -114,9 +114,14 @@ class Fs extends FlysystemFs
     public string $expires = '';
 
     /**
-     * @var bool Set ACL for Uploads
+     * @var bool Set ACL for Uploads -- R2 only supports public/private for the bucket as a whole
      */
     public bool $makeUploadsPublic = true;
+
+    /**
+     * @var Visibility visibility for the bucket
+    */
+    public Visibility $visibility = Visibility::PUBLIC;
 
     /**
      * @var string S3 storage class to use.
