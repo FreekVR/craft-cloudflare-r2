@@ -119,9 +119,9 @@ class Fs extends FlysystemFs
     public bool $makeUploadsPublic = true;
 
     /**
-     * @var Visibility visibility for the bucket
+     * @var string visibility for the bucket
     */
-    public Visibility $visibility = Visibility::PUBLIC;
+    public string $visibility = Visibility::PUBLIC;
 
     /**
      * @var string S3 storage class to use.
